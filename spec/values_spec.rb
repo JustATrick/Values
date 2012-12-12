@@ -79,5 +79,16 @@ describe 'values' do
     it 'does not have an equal hash if the class is different' do
       Point.new(0,0).hash.should_not == Y.new(0,0).hash
     end
+
+    it 'has a hash that remains a Fixnum when the sum of field hashes is a Bignum' do
+      class StubWithLargestHash
+        FIXNUM_MAX = 2**(0.size * 8 - 2) - 1
+        def hash
+          FIXNUM_MAX
+	end
+      end
+      field = StubWithLargestHash.new
+      Y.new(field, field).hash.class.should == Fixnum
+    end
   end
 end

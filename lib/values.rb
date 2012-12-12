@@ -26,11 +26,11 @@ class Value
       end
 
       def hash
-        result = 0
-        self.class::VALUE_ATTRS.each do |field|
-          result += self.send(field).hash
-        end
-        return result + self.class.hash
+        hash_factors = [self.class.hash]
+        hash_factors << self.class::VALUE_ATTRS.map do |field|
+          self.send(field)
+	end
+        hash_factors.hash
       end
     end
   end
